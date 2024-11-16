@@ -13,11 +13,15 @@ func minSubsetSumDifference(arr []int, n int) int {
 		dp[i] = make([]bool, k+1)
 	}
 
-	for i := 0; i < n; i++ {
+	for i := 1; i < n; i++ {
 		dp[i][0] = true
 	}
 
-	dp[0][arr[0]] = true
+	for j := 1; j < k+1; j++ {
+		dp[0][j] = (arr[0] == j)
+	}
+
+	dp[0][0] = true
 
 	for i := 1; i < n; i++ {
 		for j := 1; j < k+1; j++ {

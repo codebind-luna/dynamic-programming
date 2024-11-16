@@ -44,7 +44,7 @@ func max(a, b int) int {
 func maxProfit(prices []int) int {
 	n := len(prices)
 	dp := make([][]int, n+1)
-	for i := 0; i < n+1; i++ {
+	for i := 0; i <= n; i++ {
 		dp[i] = make([]int, 2)
 	}
 

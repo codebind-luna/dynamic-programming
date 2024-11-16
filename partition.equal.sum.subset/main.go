@@ -1,5 +1,7 @@
 package main
 
+// input [1,2,5] will output false
+// input [2,3,5] will output true
 func canPartition(nums []int) bool {
 	sum := 0
 	n := len(nums)
@@ -19,22 +21,21 @@ func canPartition(nums []int) bool {
 	}
 
 	for i := 0; i < n; i++ {
-		for j := 0; j < k+1; j++ {
-			if j == 0 {
-				dp[i][j] = true
-				continue
-			}
+		dp[i][0] = true
+	}
 
-			if i == 0 {
-				dp[i][j] = (nums[i] == j)
-				continue
-			}
+	for j := 0; j < k+1; j++ {
+		dp[0][j] = (nums[0] == j)
+	}
 
+	for i := 1; i < n; i++ {
+		for j := 1; j < k+1; j++ {
+			nonPick := dp[i-1][j]
+			pick := false
 			if nums[i] <= j {
-				dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i]]
-			} else {
-				dp[i][j] = dp[i-1][j]
+				pick = dp[i-1][j-nums[i]]
 			}
+			dp[i][j] = nonPick || pick
 		}
 	}
 

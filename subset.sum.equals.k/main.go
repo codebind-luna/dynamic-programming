@@ -6,8 +6,9 @@ func subsetSumToK(n int, k int, arr []int) bool {
 		dp[i] = make([]bool, k+1)
 	}
 
-	dp[0][0] = true
-
+	// empty subset i.e {} will result 0 sum
+	// hence no matter the nums of elements in the positive
+	// array 0 subset sum can be found
 	for i := 1; i < n; i++ {
 		dp[i][0] = true
 	}
@@ -15,6 +16,8 @@ func subsetSumToK(n int, k int, arr []int) bool {
 	for j := 1; j < k+1; j++ {
 		dp[0][j] = (arr[0] == j)
 	}
+
+	dp[0][0] = true
 
 	for i := 1; i < n; i++ {
 		for j := 1; j < k+1; j++ {

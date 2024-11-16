@@ -1,53 +1,44 @@
 package main
 
+import "math"
+
 func minFallingPathSum(matrix [][]int) int {
-	m := len(matrix)
-	n := len(matrix[0])
+	n := len(matrix)
+	m := len(matrix[0])
 
-	dp := make([][]int, m)
+	dp := make([][]int, n)
 
-	for i := 0; i < m; i++ {
-		dp[i] = make([]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, m)
 	}
 
-	copy(dp[0], matrix[0])
+	for j := 0; j < m; j++ {
+		dp[n-1][j] = matrix[n-1][j]
+	}
 
-	for i := 1; i < m; i++ {
-		for j := 0; j < n; j++ {
-			var minPathAbove int
-
-			switch j {
-			case 0:
-				minPathAbove = min([]int{dp[i-1][j], dp[i-1][j+1]})
-			case len(dp[0]) - 1:
-				minPathAbove = min([]int{dp[i-1][j-1], dp[i-1][j]})
-			default:
-				minPathAbove = min([]int{dp[i-1][j-1], dp[i-1][j], dp[i-1][j+1]})
+	for i := n - 2; i >= 0; i-- {
+		for j := m - 1; j >= 0; j-- {
+			ld := math.MaxInt
+			if j > 0 {
+				ld = matrix[i][j] + dp[i+1][j-1]
 			}
 
-			dp[i][j] = minPathAbove + matrix[i][j]
+			rd := math.MaxInt
 
+			if j < n-1 {
+				rd = matrix[i][j] + dp[i+1][j+1]
+			}
+
+			d := matrix[i][j] + dp[i+1][j]
+
+			dp[i][j] = min(min(ld, rd), d)
 		}
 	}
-	return min(dp[len(dp)-1])
-}
 
-func min(a []int) int {
-	curMin := a[0]
-	for _, elem := range a {
-		if elem < curMin {
-			curMin = elem
-		}
-	}
-	return curMin
-}
-
-func main() {
-	matrix := [][]int{
-		{2, 1, 3},
-		{6, 5, 4},
-		{7, 8, 9},
+	res := math.MaxInt
+	for j := 0; j < m; j++ {
+		res = min(res, dp[0][j])
 	}
 
-	minFallingPathSum(matrix)
+	return res
 }

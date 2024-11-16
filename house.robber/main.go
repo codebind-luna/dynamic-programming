@@ -2,22 +2,15 @@ package main
 
 func rob(nums []int) int {
 	n := len(nums)
-	dp := make([]int, n)
 
-	dp[0] = nums[0]
+	dp := make([]int, n+1)
+	dp[n] = 0
+	dp[n-1] = nums[n-1]
 
-	for i := 1; i < n; i++ {
-		take := nums[i]
-
-		if i > 1 {
-			take += dp[i-2]
-		}
-		notTake := dp[i-1]
-
-		dp[i] = max(notTake, take)
+	for i := n - 2; i >= 0; i-- {
+		dp[i] = max(nums[i]+dp[i+2], dp[i+1])
 	}
-
-	return dp[n-1]
+	return dp[0]
 }
 
 func max(a, b int) int {

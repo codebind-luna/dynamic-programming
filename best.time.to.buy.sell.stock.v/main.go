@@ -19,7 +19,7 @@ func f(idx int, buy int, prices []int, dp [][]int) int {
 }
 
 func fRec(idx int, buy int, prices []int) int {
-	if idx == len(prices) {
+	if idx >= len(prices) {
 		return 0
 	}
 
@@ -55,12 +55,13 @@ func fRec(idx int, buy int, prices []int) int {
 
 func maxProfit(prices []int) int {
 	n := len(prices)
-	dp := make([][]int, n+1)
-	for i := 0; i < n+2; i++ {
+	dp := make([][]int, n+2)
+	for i := 0; i <= n+1; i++ {
 		dp[i] = make([]int, 2)
 	}
 
-	// dp[n][0], dp[n][1] = 0, 0
+	dp[n+1][0], dp[n+1][1] = 0, 0
+	dp[n][0], dp[n][1] = 0, 0
 
 	for idx := n - 1; idx >= 0; idx-- {
 		for buy := 0; buy < 2; buy++ {

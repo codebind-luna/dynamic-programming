@@ -1,19 +1,26 @@
 package main
 
-func wordBreak(s string, wordDict []string) bool {
-	n := len(s)
-	dp := make([]bool, n+1)
-	dp[n] = true
+func canBreak(idx int, s string, m map[string]bool) bool {
+	if idx == len(s) {
+		return true
+	}
 
-	for i := n - 1; i >= 0; i-- {
-		for _, word := range wordDict {
-			if i+len(word) <= len(s) && s[i:i+len(word)] == word {
-				dp[i] = dp[i+len(word)]
-			}
-			if dp[i] {
-				break
-			}
+	if m[s[idx:]] {
+		return true
+	}
+
+	for j := 0; idx+j < len(s); j++ {
+		if m[s[idx:idx+j+1]] && canBreak(idx+j+1, s, m) {
+			return true
 		}
 	}
-	return dp[0]
+	return false
+}
+
+func wordBreak(s string, wordDict []string) bool {
+	words := make(map[string]bool)
+	for _, v := range wordDict {
+		words[v] = true
+	}
+	return canBreak(0, s, words)
 }
